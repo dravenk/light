@@ -23,12 +23,10 @@ jobs:
       run: npm install -g tailwindcss
 
     - uses: actions/checkout@v3
-    - name: Install Wasm
-      run: rustup target add wasm32-unknown-unknown
-
+    - name: Update system
+      run: sudo apt -y update
     - name: Install system Dependencies for Tauri
-    - run: sudo apt -y update
-    - run: sudo apt -y install libwebkit2gtk-4.0-dev \
+      run: sudo apt -y install libwebkit2gtk-4.0-dev \
         build-essential \
         curl \
         wget \
@@ -39,6 +37,8 @@ jobs:
         librsvg2-dev
     - name: Install Tauri cli
       run: cargo install tauri-cli
+    - name: Install Wasm
+      run: rustup target add wasm32-unknown-unknown
     - name: Build
       run: cargo tauri build
     - name: Run tests
