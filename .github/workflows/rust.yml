@@ -27,8 +27,8 @@ jobs:
       run: rustup target add wasm32-unknown-unknown
 
     - name: Install system Dependencies for Tauri
-    - run: sudo apt update && \
-        sudo apt install libwebkit2gtk-4.0-dev \
+    - run: sudo apt -y update
+    - run: sudo apt -y install libwebkit2gtk-4.0-dev \
         build-essential \
         curl \
         wget \
