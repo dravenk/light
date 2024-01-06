@@ -2,6 +2,7 @@
 
 ---
 
+[![publish](https://github.com/dravenk/buffalo/actions/workflows/publish.yml/badge.svg)](https://github.com/dravenk/buffalo/actions/workflows/publish.yml)
 
 ## Recommended IDE Setup
 
