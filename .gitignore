@@ -1,0 +1,8 @@
+.env
+/dist/
+/target/
+/Cargo.lock
+ui/dist
+/db/
+key.toml
+vendor

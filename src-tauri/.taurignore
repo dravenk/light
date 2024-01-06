@@ -1,0 +1,7 @@
+../db/
+./db
+./key.toml
+/db
+/key.toml
+../key.toml
+/.buffalo

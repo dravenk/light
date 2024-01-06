@@ -1,0 +1,21 @@
+[build]
+target = "index.html"
+dist = "dist"
+
+[watch]
+address = "0.0.0.0"
+# Paths to watch. The `build.target`'s parent folder is watched by default.
+# watch = []
+ignore = [
+  "./src-tauri",
+]
+
+[serve]
+address = "127.0.0.1"
+# address = "0.0.0.0"
+port = 1420
+open = false
+ignore = [
+  "./src-tauri"
+]
+
