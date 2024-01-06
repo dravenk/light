@@ -7,15 +7,9 @@
 
 
 ```
-
+npm install -g tailwindcss
 rustup target add wasm32-unknown-unknown
-cargo build -Z build-std --target wasm32-unknown-unknown
-
-cargo install cargo-wasi
-
-cargo tauri info
-rustup target add wasm32-unknown-unknown
-cargo install trunk
+cargo install --locked tauri-cli
+cargo install --locked trunk
 cargo install wasm-bindgen-cli
-
 ```
