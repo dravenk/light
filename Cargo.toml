@@ -3,6 +3,7 @@ name = "light-ui"
 version = "0.1.0"
 edition = "2021"
 
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
 wallet = { path = "./wallet" }
@@ -20,3 +21,8 @@ log = "0.4.20"
 
 [workspace]
 members = ["src-tauri"]
+
+[build-dependencies]
+trunk = "0.18.4"
+tauri-cli = "1.5.9"
+wasm-bindgen-cli = "0.2.89"
