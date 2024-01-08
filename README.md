@@ -1,8 +1,8 @@
-## ehap
+## Light
 
 ---
 
-[![publish](https://github.com/dravenk/buffalo/actions/workflows/publish.yml/badge.svg)](https://github.com/dravenk/buffalo/actions/workflows/publish.yml)
+[![publish](https://github.com/dravenk/light/actions/workflows/release.yml/badge.svg)](https://github.com/dravenk/light/actions/workflows/release.yml)
 
 
 Everything has a price

@@ -44,7 +44,7 @@ fn appdata_dir(os: &str, app_name: &str) -> PathBuf {
 }
 
 pub fn app_dir() -> PathBuf {
-    let app_name = "buffalo";
+    let app_name = "light";
     appdata_dir(env::consts::OS, app_name)
 }
 
@@ -60,6 +60,6 @@ pub fn db_dir() -> String {
 
 pub fn db_path() -> String {
     // let path = data_dir().unwrap();
-    let db_path = format!("{}/{}", db_dir(), "buffalo.db");
+    let db_path = format!("{}/{}", db_dir(), "light.db");
     db_path
 }

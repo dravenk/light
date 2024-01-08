@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "buffalo",
+    "productName": "light",
     "version": "0.1.0"
   },
   "tauri": {
@@ -37,7 +37,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.buffalo.dev",
+      "identifier": "com.light.dev",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -53,7 +53,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "buffalo",
+        "title": "light",
         "width": 1080,
         "height": 760
       }
