@@ -69,8 +69,8 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Str
     loop {
         match swarm.select_next_some().await {
             SwarmEvent::NewListenAddr { address, .. } => {
-                let msg = format!("{:?}", address);
-                println!("{}", msg);
+                let msg = format!("address: {:?}", address);
+                // println!("{}", msg);
                 let _ = sender.send(msg);
             }
             SwarmEvent::Behaviour(NodeBehaviourEvent::Mdns(mdns::Event::Discovered(list))) => {
@@ -78,7 +78,7 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Str
                     let mut peer_id = peer.0;
 
                     let msg = format!("mDNS discovered a new peer: {peer_id}");
-                    println!("{}", msg);
+                    // println!("{}", msg);
                     let _ = sender.send(msg);
 
                     // 测试发用文本
@@ -90,29 +90,31 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Str
                 for peer in list {
                     let peer_id = peer.0;
                     let msg = format!("mDNS discover peer has expired: {peer_id}");
-                    println!("{}", msg);
+                    // println!("{}", msg);
                     let _ = sender.send(msg);
                 }
             }
             SwarmEvent::Behaviour(NodeBehaviourEvent::Handler(request_response::Event::Message { message, .. })) => match message {
                 Message::Request { request, channel: _, .. } => {
                     let msg = format!("Request Message:{:#?}", request);
-                    println!("{}", msg);
+                    // println!("{}", msg);
                     let _ = sender.send(msg);
                 }
                 Message::Response { request_id: _, response } => {
                     let msg = format!("Response Message:{:#?}", response);
-                    println!("{}", msg);
+                    // println!("{}", msg);
                     let _ = sender.send(msg);
                 }
             },
             SwarmEvent::ConnectionClosed { peer_id, .. } => {
                 let msg = format!("ConnectionClosed peer_id {:#?}", peer_id.to_string());
-                println!("{}", msg);
+                // println!("{}", msg);
                 let _ = sender.send(msg);
             }
             _other => {
-                // println!("other {:?}", other);
+                let msg = format!("ConnectionClosed _other {:#?}", _other);
+                println!("{}", msg);
+                let _ = sender.send(msg);
             }
         }
     }

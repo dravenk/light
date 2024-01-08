@@ -59,37 +59,41 @@ pub fn settings() -> Html {
     };
 
     html! {
-         <div class="flex wrap column" style="">
-          <div class="row mw-75" >
-          {
-             for (1..25).map(|i| {
-            let words = words.clone();
-            let word = words[i-1].clone();
-            let word_clone = word.to_owned().clone();
-            let input_id = "input-".to_string() + i.to_string().as_str();
-            let input_node_ref = input_node_ref.clone();
+         <div class="">
+            <div class="flex flex-wrap" >
+            {
+                for (1..25).map(|i| {
+                let words = words.clone();
+                let word = words[i-1].clone();
+                let word_clone = word.to_owned().clone();
+                let input_id = "input-".to_string() + i.to_string().as_str();
+                let input_node_ref = input_node_ref.clone();
 
-            html! {
-                <div class="flex items-center mx-2 my-0 px-2 py-1 h-14 w-40" >
-                    <div class="number mr-1.5">{ i.clone() }</div>
-                    <input
-                    class="w-full "
-                    disabled={true}
-                    placeholder={ word_clone.clone()}
-                    id={ input_id }
-                        type="text"
-                        value={word_clone.clone()}
-                        ref={input_node_ref}
-                    />
-                </div>
+                html! {
+                    <div class="flex items-center m-1 p-2 h-12 w-36" >
+                        <div class="number mr-1.5 w-4">{ i.clone() }</div>
+                        <input
+                        class="w-full p-2 rounded-xl"
+                        disabled={true}
+                        placeholder={ word_clone.clone()}
+                        id={ input_id }
+                            type="text"
+                            value={word_clone.clone()}
+                            ref={input_node_ref}
+                        />
+                    </div>
+                }
+                })
             }
-        }) }
-          </div>
-          <div class="flex">
-          <button class="mx-4" onclick={ callback }>
-          { "Click me!" }
-            </button>
-         </div>
-         </div>
+            </div>
+
+            <div class="">
+                <button  class="h-14 mx-8 my-4 px-6 flex justify-center items-center
+                focus:text-orange-500  rounded-2xl bg-gray-200 hover:bg-gray-300"
+                 onclick={ callback }>
+                { "Click me!" }
+                </button>
+            </div>
+        </div>
     }
 }

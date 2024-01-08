@@ -9,17 +9,19 @@ use libp2p::{
     tcp, yamux,
 };
 
-use std::error::Error;
 use std::net::{Ipv4Addr, Ipv6Addr};
+use std::{error::Error, sync::mpsc::Sender};
 use tracing_subscriber::EnvFilter;
 
 pub fn main() {
     // let opt = Opt::parse();
     let opt = &Opt { use_ipv6: Some(false), secret_key_seed: 1, port: 4001 };
-    let _ = self::run(opt);
+
+    let (tx, _) = std::sync::mpsc::channel();
+    let _ = self::run(opt, tx);
 }
 
-pub fn run(opt: &Opt) -> Result<(), Box<dyn Error>> {
+pub fn run(opt: &Opt, sender: Sender<String>) -> Result<(), Box<dyn Error>> {
     let _ = tracing_subscriber::fmt().with_env_filter(EnvFilter::from_default_env()).try_init();
     // Create a static known PeerId based on given secret
     let local_key: identity::Keypair = generate_ed25519(opt.secret_key_seed);
@@ -61,14 +63,23 @@ pub fn run(opt: &Opt) -> Result<(), Box<dyn Error>> {
                         &event
                     {
                         swarm.add_external_address(observed_addr.clone());
-                        println!("Observed address: {:?}", observed_addr.clone());
+                        let msg: String = format!("relay_server: Observed address: {:?}", observed_addr.clone());
+                        // println!("{}",msg);
+                        sender.send(msg).unwrap();
                     }
 
                     println!("{event:?}")
                 }
                 SwarmEvent::NewListenAddr { address, .. } => {
-                    println!("Listening on {address:?}");
-                    println!("Listening on {:?}", swarm.local_peer_id());
+                    // println!("relay_server: Listening on {address:?}");
+                    // println!("relay_server: Listening on {:?}", swarm.local_peer_id());
+                    let msg: String = format!("relay_server: Listening on: {:?}", address.clone());
+                    // println!("{}",msg);
+                    sender.send(msg).unwrap();
+
+                    let msg: String = format!("relay_server: Listening on local peer {:?}", swarm.local_peer_id().to_string());
+                    // println!("{}",msg);
+                    sender.send(msg).unwrap();
                 }
                 _ => {}
             }

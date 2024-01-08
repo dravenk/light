@@ -1,8 +1,11 @@
-## Buffalo
+## ehap
 
 ---
 
 [![publish](https://github.com/dravenk/buffalo/actions/workflows/publish.yml/badge.svg)](https://github.com/dravenk/buffalo/actions/workflows/publish.yml)
+
+
+Everything has a price
 
 ## Recommended IDE Setup
 
