@@ -4540,7 +4540,7 @@ dependencies = [
 
 [[package]]
 name = "light"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-std",
  "async-trait",
@@ -4575,7 +4575,7 @@ dependencies = [
 
 [[package]]
 name = "light-ui"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "js-sys",
  "log",
@@ -5540,7 +5540,7 @@ dependencies = [
 
 [[package]]
 name = "p2p"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-std",
  "async-trait",
@@ -8710,7 +8710,7 @@ checksum = "711b9620af191e0cdc7468a8d14e709c3dcdb115b36f838e601583af800a370a"
 
 [[package]]
 name = "util"
-version = "0.1.0"
+version = "0.1.1"
 
 [[package]]
 name = "uuid"
@@ -8832,7 +8832,7 @@ dependencies = [
 
 [[package]]
 name = "wallet"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "bip32",
  "rand_core 0.6.4",
