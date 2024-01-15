@@ -1,10 +1,11 @@
 use log::info;
 use wasm_bindgen::JsCast;
-use web_sys::{EventTarget, HtmlInputElement};
+use web_sys::KeyboardEvent;
+use web_sys::{EventTarget, HtmlTextAreaElement};
 use yew::prelude::*;
 
-#[function_component(Secure)]
-pub fn secure() -> Html {
+#[function_component(Conversation)]
+pub fn conversation() -> Html {
     let input_value_handle = use_state(String::default);
     let input_value = (*input_value_handle).clone();
 
@@ -12,12 +13,8 @@ pub fn secure() -> Html {
         let input_value_handle = input_value_handle.clone();
 
         Callback::from(move |e: Event| {
-            // When events are created the target is undefined, it's only
-            // when dispatched does the target get added.
             let target: Option<EventTarget> = e.target();
-            // Events can bubble so this listener might catch events from child
-            // elements which are not of type HtmlInputElement
-            let input = target.and_then(|t| t.dyn_into::<HtmlInputElement>().ok());
+            let input = target.and_then(|t| t.dyn_into::<HtmlTextAreaElement>().ok());
             info!("input_value: {:?}", input.clone());
             println!("input: {:?}", input.clone());
             if let Some(input) = input {
@@ -27,15 +24,30 @@ pub fn secure() -> Html {
         })
     };
 
+    let onkeypress = {
+        let input_value_handle = input_value_handle.clone();
+
+        Callback::from(move |e: KeyboardEvent| {
+            let key = e.key();
+            // Enter| e.code(): "Enter" | e.key(): "Enter" |  e.key_code() == 13
+            let target: Option<EventTarget> = e.target();
+            let input = target.and_then(|t| t.dyn_into::<HtmlTextAreaElement>().ok());
+            if key == "Enter" {
+                if let Some(input) = input {
+                    info!("input_value: {:?}", input.clone().as_string());
+                    input_value_handle.set(input.value());
+                }
+                // input_value_handle.set("".to_string());
+            }
+        })
+    };
+
     let on_dangerous_change = {
         let input_value_handle = input_value_handle.clone();
 
         Callback::from(move |e: Event| {
             let target: EventTarget = e.target().expect("Event should have a target when dispatched");
-            // You must KNOW target is a HtmlInputElement, otherwise
-            // the call to value would be Undefined Behaviour (UB).
-            // Here we are sure that this is input element so we can convert it to the appropriate type without checking
-            input_value_handle.set(target.unchecked_into::<HtmlInputElement>().value());
+            input_value_handle.set(target.unchecked_into::<HtmlTextAreaElement>().value());
         })
     };
 
@@ -65,10 +77,12 @@ pub fn secure() -> Html {
                     </div>
                     <div class="px-4 py-2 bg-white rounded-b-lg">
                         <label for="editor" class="sr-only">{"Publish post"}</label>
+
                         <textarea
                         rows="8"
                         placeholder="Write an article..."
                         onchange={on_cautious_change}
+                        onkeypress={onkeypress}
                         id="cautious-input"
                         type="text"
                         value={input_value.clone()}
@@ -80,9 +94,8 @@ pub fn secure() -> Html {
                     </div>
                 </div>
             </form>
-        // </label>
-        <label for="dangerous-input">
-            { "My dangerous input:" }
+        <label for="conversation-input">
+            { "Conversation: " }
             <input onchange={on_dangerous_change}
                 id="dangerous-input"
                 type="text"

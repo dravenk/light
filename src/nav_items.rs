@@ -89,13 +89,12 @@ pub fn nav_items() -> Html {
         }
     };
 
-    let input_button = {
+    let conversation_button = {
         let navigator = navigator.clone();
-        let onclick = Callback::from(move |_| navigator.push(&main_route::Secure));
+        let onclick = Callback::from(move |_| navigator.push(&main_route::Conversation));
         html! {
             <button {onclick}  class="h-16 px-6 flex flex justify-center items-center w-full
             focus:text-orange-500 bg-inherit">
-            // {"Status"}
                  <svg
                             class="h-5 w-5"
                             xmlns="http://www.w3.org/2000/svg"
@@ -134,7 +133,7 @@ pub fn nav_items() -> Html {
                       {settings_button}
                   </li>
                   <li class="hover:bg-gray-100">
-                      {input_button}
+                      {conversation_button}
                   </li>
               </ul>
 
