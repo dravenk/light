@@ -5,7 +5,7 @@ use std::fs;
 
 use crate::db::*;
 use util::appdata;
-use wallet::wallet_phrase::PrivKey;
+use wallet::phrase::PrivKey;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -28,7 +28,7 @@ pub fn create_key(path: &str) -> String {
 
 #[tauri::command]
 pub fn generage_key(strength: &str) -> String {
-    let mnemonic = wallet::wallet_phrase::get_mnemonic_by_strength(strength);
+    let mnemonic = wallet::phrase::get_mnemonic_by_strength(strength);
     phrase_to_file(&mnemonic);
     mnemonic.phrase
 }

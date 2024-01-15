@@ -6,7 +6,7 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
-wallet = { path = "./wallet" }
+# wallet = { path = "./wallet" }
 
 yew = { version = "0.21.0", features = ["csr"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -19,10 +19,55 @@ wasm-bindgen-futures = "0.4.39"
 yew-router = "0.18.0"
 log = "0.4.20"
 
-[workspace]
-members = ["src-tauri"]
+
+[workspace.dependencies]
+clap = { version = "4.4.11", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+bip39 = {version = "2.0.0"}
+bip32 = "0.5.1"
+rand_core = { version = "0.6.4", features = ["std"] }
+bitcoin_hashes = "0.13.0"
+bitcoin = "0.31.0"
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1"
+futures = "0.3.29"
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+toml = "0.8.8"
+async-std = { version = "1.12", features = ["attributes", "tokio1"] }
+env_logger = "0.10.1"  
+chrono = "0.4.31"  
+libp2p = { version = "0.53.2", features = [  
+    "async-std",  
+    "mdns",  
+    "tokio",  
+    "noise",  
+    "macros",  
+    "tcp",  
+    "yamux",  
+    "quic",  
+    "cbor",  
+    "request-response",  
+    "gossipsub",
+    "identify",
+    "ping",
+    "relay"
+] }
 
 [build-dependencies]
 trunk = "0.18.4"
 tauri-cli = "1.5.9"
 wasm-bindgen-cli = "0.2.89"
+
+[workspace]
+resolver = "2"
+members = [
+    "src-tauri",
+    "p2p",
+    "wallet",
+    "util",
+]
+[workspace.package] 
+version = "0.1.0"
+edition = "2021"

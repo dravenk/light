@@ -9,8 +9,6 @@ use yew_router::prelude::*;
 pub enum MainRoute {
     #[at("/")]
     Main,
-    #[at("/secure")]
-    Secure,
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -18,8 +16,8 @@ pub enum MainRoute {
     Settings,
     #[at("/status")]
     Status,
-    // #[at("/key")]
-    // Generage,
+    #[at("/secure")]
+    Secure,
 }
 
 pub fn switch(route: MainRoute) -> Html {
@@ -38,10 +36,9 @@ pub fn switch(route: MainRoute) -> Html {
             html! {
                 <Status />
             }
-        }
-        // MainRoute::Misc { path } => html! {<p>{format!("Matched some other path: {}", path)}</p>},
-        // MainRoute::Generage => html! {
-        //     <Generage />
-        // },
+        } // MainRoute::Misc { path } => html! {<p>{format!("Matched some other path: {}", path)}</p>},
+          // MainRoute::Generage => html! {
+          //     <Generage />
+          // },
     }
 }

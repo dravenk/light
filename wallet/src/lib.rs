@@ -1,2 +1,3 @@
 pub mod keys;
-pub mod wallet_phrase;
+pub mod phrase;
+pub mod seed;
