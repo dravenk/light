@@ -1,9 +1,9 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
+use crate::conversation::Conversation;
 use crate::settings::Settings;
 use crate::status::Status;
-use crate::conversation::Conversation;
 
 #[derive(Debug, Clone, PartialEq, Routable)]
 pub enum MainRoute {
@@ -17,7 +17,7 @@ pub enum MainRoute {
     #[at("/settings")]
     Settings,
     #[at("/conversation")]
-    Conversation
+    Conversation,
 }
 
 pub fn switch(route: MainRoute) -> Html {
@@ -28,12 +28,12 @@ pub fn switch(route: MainRoute) -> Html {
             html! {
                 <Status />
             }
-        },
+        }
         MainRoute::Settings => {
             html! {
                 <Settings />
             }
-        },
+        }
         MainRoute::Conversation => html! {
             <Conversation />
         },

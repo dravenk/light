@@ -3,8 +3,8 @@ use yew_router::prelude::*;
 
 use crate::MainRoute as main_route;
 
-#[function_component(NavItems)]
-pub fn nav_items() -> Html {
+#[function_component(Nav)]
+pub fn nav() -> Html {
     let navigator = use_navigator().unwrap();
     let main_button = {
         let navigator = navigator.clone();

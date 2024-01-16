@@ -1,15 +1,15 @@
-// mod generage;
+use yew::prelude::*;
+use yew_router::prelude::*;
+
 mod conversation;
-mod nav_items;
+mod ipfs;
+mod nav;
 mod route;
 mod settings;
 mod status;
-
-use nav_items::NavItems;
+use nav::Nav;
 use route::switch;
 use route::MainRoute;
-use yew::prelude::*;
-use yew_router::prelude::*;
 
 fn main() {
     wasm_logger::init(wasm_logger::Config::default());
@@ -34,7 +34,7 @@ pub fn app() -> Html {
 
             <div class="flex w-full h-full">
                 <div class="flex h-screen">
-                 <NavItems />
+                 <Nav />
                 </div>
                 // <!-- main content page -->
                 <div class="w-full p-4">

@@ -4,8 +4,12 @@ use web_sys::KeyboardEvent;
 use web_sys::{EventTarget, HtmlTextAreaElement};
 use yew::prelude::*;
 
+use crate::ipfs;
+
 #[function_component(Conversation)]
 pub fn conversation() -> Html {
+    let show_msg_handle: UseStateHandle<String> = use_state(String::default);
+    let show_msg = (*show_msg_handle).clone();
     let input_value_handle = use_state(String::default);
     let input_value = (*input_value_handle).clone();
 
@@ -26,31 +30,28 @@ pub fn conversation() -> Html {
 
     let onkeypress = {
         let input_value_handle = input_value_handle.clone();
+        let show_msg_handle = show_msg_handle.clone();
 
         Callback::from(move |e: KeyboardEvent| {
-            let key = e.key();
-            // Enter| e.code(): "Enter" | e.key(): "Enter" |  e.key_code() == 13
-            let target: Option<EventTarget> = e.target();
-            let input = target.and_then(|t| t.dyn_into::<HtmlTextAreaElement>().ok());
-            if key == "Enter" {
-                if let Some(input) = input {
-                    info!("input_value: {:?}", input.clone().as_string());
-                    input_value_handle.set(input.value());
+            if !e.shift_key() {
+                // Enter| e.code(): "Enter" | e.key(): "Enter" |  e.key_code() == 13
+                let target: Option<EventTarget> = e.target();
+                let input = target.and_then(|t| t.dyn_into::<HtmlTextAreaElement>().ok());
+                if e.key() == "Enter" {
+                    if let Some(input) = input {
+                        info!("input_value: {:?}", input.clone().as_string());
+                        let cid = ipfs::cid::bytes_to_cid(input.value().as_bytes());
+                        let msg = cid.unwrap().to_string();
+                        // All data should be encrypted before sending to ipfs
+                        show_msg_handle.set(msg);
+                        input_value_handle.set(String::default());
+                    }
                 }
-                // input_value_handle.set("".to_string());
+            } else {
+                info!("shift_key: {:?}", e.shift_key());
             }
         })
     };
-
-    let on_dangerous_change = {
-        let input_value_handle = input_value_handle.clone();
-
-        Callback::from(move |e: Event| {
-            let target: EventTarget = e.target().expect("Event should have a target when dispatched");
-            input_value_handle.set(target.unchecked_into::<HtmlTextAreaElement>().value());
-        })
-    };
-
     html! {
         <div class="w-full h-full relative">
             <form class="w-full  absolute bottom-4 ">
@@ -94,14 +95,7 @@ pub fn conversation() -> Html {
                     </div>
                 </div>
             </form>
-        <label for="conversation-input">
-            { "Conversation: " }
-            <input onchange={on_dangerous_change}
-                id="dangerous-input"
-                type="text"
-                value={input_value}
-            />
-        </label>
+        <div class="show-message">{show_msg}</div>
     </div>
     }
 }

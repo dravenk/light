@@ -1,6 +1,5 @@
 use yew::html;
 use yew::prelude::*;
-
 use yew::Html;
 
 #[function_component(Status)]
