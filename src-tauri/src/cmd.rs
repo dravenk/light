@@ -20,6 +20,11 @@ pub fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
+pub fn get_peer_id() -> String {
+    "".to_owned()
+}
+
+#[tauri::command]
 pub fn create_key(path: &str) -> String {
     println!("Creating a new key to {}", path);
     let _ = wallet::keys::create_priv_k();

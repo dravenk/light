@@ -65,21 +65,25 @@ fn new_swarm() -> Swarm<NodeBehaviour> {
     swarm
 }
 
-async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<String>) {
+async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Box<dyn Fn() + Send>>) {
     loop {
         match swarm.select_next_some().await {
             SwarmEvent::NewListenAddr { address, .. } => {
                 let msg = format!("address: {:?}", address);
-                // println!("{}", msg);
-                let _ = sender.send(msg);
+                let print_msg = move || {
+                    println!("{}", msg);
+                };
+                let _ = sender.send(Box::new(print_msg));
             }
             SwarmEvent::Behaviour(NodeBehaviourEvent::Mdns(mdns::Event::Discovered(list))) => {
                 for peer in list {
                     let mut peer_id = peer.0;
 
                     let msg = format!("mDNS discovered a new peer: {peer_id}");
-                    // println!("{}", msg);
-                    let _ = sender.send(msg);
+                    let print_msg = move || {
+                        println!("{}", msg);
+                    };
+                    let _ = sender.send(Box::new(print_msg));
 
                     // 测试发用文本
                     let req = { "Hi".to_string() };
@@ -90,37 +94,47 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Str
                 for peer in list {
                     let peer_id = peer.0;
                     let msg = format!("mDNS discover peer has expired: {peer_id}");
-                    // println!("{}", msg);
-                    let _ = sender.send(msg);
+                    let print_msg = move || {
+                        println!("{}", msg);
+                    };
+                    let _ = sender.send(Box::new(print_msg));
                 }
             }
             SwarmEvent::Behaviour(NodeBehaviourEvent::Handler(request_response::Event::Message { message, .. })) => match message {
                 Message::Request { request, channel: _, .. } => {
                     let msg = format!("Request Message:{:#?}", request);
-                    // println!("{}", msg);
-                    let _ = sender.send(msg);
+                    let print_msg = move || {
+                        println!("{}", msg);
+                    };
+                    let _ = sender.send(Box::new(print_msg));
                 }
                 Message::Response { request_id: _, response } => {
                     let msg = format!("Response Message:{:#?}", response);
-                    // println!("{}", msg);
-                    let _ = sender.send(msg);
+                    let print_msg = move || {
+                        println!("{}", msg);
+                    };
+                    let _ = sender.send(Box::new(print_msg));
                 }
             },
             SwarmEvent::ConnectionClosed { peer_id, .. } => {
                 let msg = format!("ConnectionClosed peer_id {:#?}", peer_id.to_string());
-                // println!("{}", msg);
-                let _ = sender.send(msg);
+                let print_msg = move || {
+                    println!("{}", msg);
+                };
+                let _ = sender.send(Box::new(print_msg));
             }
             _other => {
                 let msg = format!("ConnectionClosed _other {:#?}", _other);
-                println!("{}", msg);
-                let _ = sender.send(msg);
+                let print_msg = move || {
+                    println!("{}", msg);
+                };
+                let _ = sender.send(Box::new(print_msg));
             }
         }
     }
 }
 
-pub fn run(sender: mpsc::Sender<String>) -> Result<(), Box<dyn Error>> {
+pub fn run(sender: mpsc::Sender<Box<dyn Fn() + Send>>) -> Result<(), Box<dyn Error>> {
     env_logger::init();
 
     let mut swarm = new_swarm();

@@ -21,7 +21,7 @@ pub fn main() {
     let _ = self::run(opt, tx);
 }
 
-pub fn run(opt: &Opt, sender: Sender<String>) -> Result<(), Box<dyn Error>> {
+pub fn run(opt: &Opt, sender: Sender<Box<dyn Fn() + Send>>) -> Result<(), Box<dyn Error>> {
     let _ = tracing_subscriber::fmt().with_env_filter(EnvFilter::from_default_env()).try_init();
     // Create a static known PeerId based on given secret
     let local_key: identity::Keypair = generate_ed25519(opt.secret_key_seed);
@@ -64,8 +64,10 @@ pub fn run(opt: &Opt, sender: Sender<String>) -> Result<(), Box<dyn Error>> {
                     {
                         swarm.add_external_address(observed_addr.clone());
                         let msg: String = format!("relay_server: Observed address: {:?}", observed_addr.clone());
-                        // println!("{}",msg);
-                        sender.send(msg).unwrap();
+                        let print_msg = move || {
+                            println!("{}", msg);
+                        };
+                        let _ = sender.send(Box::new(print_msg));
                     }
 
                     println!("{event:?}")
@@ -74,12 +76,16 @@ pub fn run(opt: &Opt, sender: Sender<String>) -> Result<(), Box<dyn Error>> {
                     // println!("relay_server: Listening on {address:?}");
                     // println!("relay_server: Listening on {:?}", swarm.local_peer_id());
                     let msg: String = format!("relay_server: Listening on: {:?}", address.clone());
-                    // println!("{}",msg);
-                    sender.send(msg).unwrap();
+                    let print_msg = move || {
+                        println!("{}", msg);
+                    };
+                    let _ = sender.send(Box::new(print_msg));
 
                     let msg: String = format!("relay_server: Listening on local peer {:?}", swarm.local_peer_id().to_string());
-                    // println!("{}",msg);
-                    sender.send(msg).unwrap();
+                    let print_msg = move || {
+                        println!("{}", msg);
+                    };
+                    let _ = sender.send(Box::new(print_msg));
                 }
                 _ => {}
             }
