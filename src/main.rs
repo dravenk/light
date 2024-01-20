@@ -1,15 +1,12 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-mod conversation;
+mod components;
 mod ipfs;
-mod nav;
-mod route;
-mod settings;
-mod status;
-use nav::Nav;
-use route::switch;
-use route::MainRoute;
+
+use components::nav::Nav;
+use components::route::switch;
+use components::route::MainRoute;
 
 fn main() {
     wasm_logger::init(wasm_logger::Config::default());
@@ -38,7 +35,7 @@ pub fn app() -> Html {
                 </div>
                 // <!-- main content page -->
                 <div class="w-full p-4">
-                <Switch<MainRoute> render={switch} /> // <- must be child of <BrowserRouter>
+                <Switch<MainRoute> render={switch} />
                </div>
             </div>
         </main>

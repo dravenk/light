@@ -4,7 +4,7 @@ use web_sys::KeyboardEvent;
 use web_sys::{EventTarget, HtmlTextAreaElement};
 use yew::prelude::*;
 
-use crate::ipfs;
+use super::super::ipfs;
 
 #[function_component(Conversation)]
 pub fn conversation() -> Html {

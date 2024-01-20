@@ -1,9 +1,9 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::conversation::Conversation;
-use crate::settings::Settings;
-use crate::status::Status;
+use super::conversation::Conversation;
+use super::settings::Settings;
+use super::status::Status;
 
 #[derive(Debug, Clone, PartialEq, Routable)]
 pub enum MainRoute {

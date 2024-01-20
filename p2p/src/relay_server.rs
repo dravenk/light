@@ -1,6 +1,6 @@
+use async_std::stream::StreamExt;
 use clap::Parser;
 use futures::executor::block_on;
-use futures::stream::StreamExt;
 use libp2p::{
     core::multiaddr::Protocol,
     core::Multiaddr,
@@ -13,6 +13,14 @@ use std::net::{Ipv4Addr, Ipv6Addr};
 use std::{error::Error, sync::mpsc::Sender};
 use tracing_subscriber::EnvFilter;
 
+pub enum RelayBehaviour {
+    PeerId(String),
+    Event,
+    Multiaddr(Multiaddr),
+    Behaviour(libp2p::Swarm<Behaviour>),
+    ObservedAddress(Multiaddr),
+}
+
 pub fn main() {
     // let opt = Opt::parse();
     let opt = &Opt { use_ipv6: Some(false), secret_key_seed: 1, port: 4001 };
@@ -21,7 +29,7 @@ pub fn main() {
     let _ = self::run(opt, tx);
 }
 
-pub fn run(opt: &Opt, sender: Sender<Box<dyn Fn() + Send>>) -> Result<(), Box<dyn Error>> {
+pub fn run(opt: &Opt, sender: Sender<Box<(dyn Fn() -> RelayBehaviour + Send + 'static)>>) -> Result<(), Box<dyn Error>> {
     let _ = tracing_subscriber::fmt().with_env_filter(EnvFilter::from_default_env()).try_init();
     // Create a static known PeerId based on given secret
     let local_key: identity::Keypair = generate_ed25519(opt.secret_key_seed);
@@ -63,29 +71,25 @@ pub fn run(opt: &Opt, sender: Sender<Box<dyn Fn() + Send>>) -> Result<(), Box<dy
                         &event
                     {
                         swarm.add_external_address(observed_addr.clone());
-                        let msg: String = format!("relay_server: Observed address: {:?}", observed_addr.clone());
-                        let print_msg = move || {
-                            println!("{}", msg);
+                        // let msg: String = format!("relay_server: Observed address: {:?}", observed_addr.clone());
+                        let observed_addr_clone = observed_addr.clone();
+                        let relay_msg = move || {
+                            let address: Multiaddr = observed_addr_clone.to_string().parse().unwrap();
+                            // let behaviour = RelayBehaviour::Multiaddr(address);
+                            let behaviour = RelayBehaviour::ObservedAddress(address);
+                            behaviour
                         };
-                        let _ = sender.send(Box::new(print_msg));
+                        let _ = sender.send(Box::new(relay_msg));
                     }
-
-                    println!("{event:?}")
+                    println!("{:?}", &event)
                 }
                 SwarmEvent::NewListenAddr { address, .. } => {
-                    // println!("relay_server: Listening on {address:?}");
-                    // println!("relay_server: Listening on {:?}", swarm.local_peer_id());
-                    let msg: String = format!("relay_server: Listening on: {:?}", address.clone());
-                    let print_msg = move || {
-                        println!("{}", msg);
+                    //swarm.local_peer_id().to_string()
+                    let relay_msg = move || {
+                        let behaviour = RelayBehaviour::PeerId(address.clone().to_string());
+                        behaviour
                     };
-                    let _ = sender.send(Box::new(print_msg));
-
-                    let msg: String = format!("relay_server: Listening on local peer {:?}", swarm.local_peer_id().to_string());
-                    let print_msg = move || {
-                        println!("{}", msg);
-                    };
-                    let _ = sender.send(Box::new(print_msg));
+                    let _ = sender.send(Box::new(relay_msg));
                 }
                 _ => {}
             }
