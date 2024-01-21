@@ -17,7 +17,7 @@ pub enum RelayBehaviour {
     PeerId(String),
     Event,
     Multiaddr(Multiaddr),
-    Behaviour(libp2p::Swarm<Behaviour>),
+    // Behaviour(libp2p::Swarm<Behaviour>),
     ObservedAddress(Multiaddr),
 }
 

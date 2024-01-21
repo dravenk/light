@@ -14,6 +14,7 @@ fn main() {
     p2p::recv(rx);
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
         .invoke_handler(tauri::generate_handler![cmd::greet, cmd::get_peer_id, cmd::create_key, cmd::generage_key, cmd::insert_msg])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

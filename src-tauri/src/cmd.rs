@@ -7,7 +7,6 @@ use crate::db::*;
 use util::appdata;
 use wallet::phrase::PrivKey;
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 pub fn greet(name: &str) -> String {
     let msg: &str = "You've been greeted from Rust!";

@@ -3,27 +3,28 @@ name = "light-ui"
 version = "0.1.1"
 edition = "2021"
 
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
-# wallet = { path = "./wallet" }
-
 yew = { version = "0.21.0", features = ["csr"] }
 serde = { version = "1.0", features = ["derive"] }
 serde-wasm-bindgen = "0.6.2"
 web-sys = "0.3.66"
 js-sys = "0.3.66"
 wasm-logger = "0.2.0"
-wasm-bindgen = "0.2.89"
 wasm-bindgen-futures = "0.4.39"
 yew-router = "0.18.0"
 log = "0.4.20"
 cid = "0.11.0"
 multibase = "0.9.1"
 multihash = "0.19.1"
+wasm-bindgen = "0.2.90"
 
+[build-dependencies]
+tauri-cli = "1.5.9"
+tauri-build = { version = "2.0.0-alpha", features = [] }
 
 [workspace.dependencies]
+wasm-bindgen = "0.2.89"
 cid = "0.11.0"
 multibase = "0.9.1"
 clap = { version = "4.4.11", features = ["derive"] }
@@ -41,7 +42,7 @@ tracing = "0.1.37"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 toml = "0.8.8"
 async-std = { version = "1.12", features = ["attributes", "tokio1"] }
-env_logger = "0.10.1"  
+env_logger = "0.11.0"  
 chrono = "0.4.31"  
 libp2p = { version = "0.53.2", features = [  
     "async-std",  
@@ -60,10 +61,10 @@ libp2p = { version = "0.53.2", features = [
     "relay"
 ] }
 
-[build-dependencies]
-trunk = "0.18.4"
-tauri-cli = "1.5.9"
-wasm-bindgen-cli = "0.2.89"
+yew = { version = "0.21.0", features = ["csr"] }
+serde-wasm-bindgen = "0.6.2"
+rusqlite = {version="0.30.0", features = ["bundled"] }
+wasm-logger = "0.2.0"
 
 [workspace]
 resolver = "2"
@@ -73,6 +74,7 @@ members = [
     "wallet",
     "util",
 ]
+
 [workspace.package] 
 version = "0.1.1"
 edition = "2021"

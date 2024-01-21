@@ -38,44 +38,5 @@ libp2p = {workspace = true, features = [
     "relay"
 ] }
 
-# [dependencies]
-
-# clap = { version = "4.4.11", features = ["derive"] }
-# # tauri = { version = "1.5", features = ["shell-open"] }
-# serde = { version = "1.0", features = ["derive"] }
-# serde_json = "1.0"
-# # rusqlite = "0.30.0"
-# bip39 = {version = "2.0.0"}
-# bip32 = "0.5.1"
-# rand_core = { version = "0.6.4", features = ["std"] }
-# # wasm-logger = "0.2.0"
-# bitcoin_hashes = "0.13.0"
-# bitcoin = "0.31.0"
-# tokio = { version = "1.35", features = ["full"] }
-# async-trait = "0.1"
-# futures = "0.3.29"
-# tracing = "0.1.37"
-# tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-# toml = "0.8.8"
-# async-std = { version = "1.12", features = ["attributes", "tokio1"] }
-# env_logger = "0.10.1"  
-# chrono = "0.4.31"  
-# libp2p = { version = "0.53.2", features = [  
-#     "async-std",  
-#     "mdns",  
-#     "tokio",  
-#     "noise",  
-#     "macros",  
-#     "tcp",  
-#     "yamux",  
-#     "quic",  
-#     "cbor",  
-#     "request-response",  
-#     "gossipsub",
-#     "identify",
-#     "ping",
-#     "relay"
-# ] }
-
 [lib]
 crate-type = ["cdylib", "rlib"]

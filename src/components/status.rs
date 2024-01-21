@@ -1,5 +1,6 @@
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::spawn_local;
+use serde_wasm_bindgen::to_value;
 use yew::html;
 use yew::prelude::*;
 use yew::Html;
@@ -20,7 +21,9 @@ pub fn status() -> Html {
         let pid_handle = peer_id_handle.clone();
         use_effect_with(pid_handle, move |_| {
             spawn_local(async move {
-                let peer_id = invoke("get_peer_id", JsValue::UNDEFINED).await.as_string().unwrap();
+                let s = String::from("{}");
+                let args = serde_wasm_bindgen::to_value(&s).unwrap();
+                let peer_id = invoke("get_peer_id", args).await.as_string().unwrap();
                 peer_id_handle.set(peer_id);
             });
             || {}
