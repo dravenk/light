@@ -1,13 +1,13 @@
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::spawn_local;
-use serde_wasm_bindgen::to_value;
 use yew::html;
 use yew::prelude::*;
 use yew::Html;
 
+// https://github.com/tauri-apps/tauri/issues/8073#issuecomment-1773530639
 #[wasm_bindgen]
 extern "C" {
-    #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "tauri"])]
+    #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "core"])]
     async fn invoke(cmd: &str, args: JsValue) -> JsValue;
 }
 

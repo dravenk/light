@@ -1,27 +1,50 @@
 {
   "build": {
-    "beforeDevCommand": "trunk serve",
     "beforeBuildCommand": "trunk build",
+    "beforeDevCommand": "trunk serve",
     "devPath": "http://localhost:1420",
     "distDir": "../dist",
     "withGlobalTauri": true
   },
   "package": {
     "productName": "light",
-    "version": "0.1.0"
+    "version": "0.1.1"
+  },
+  "plugins": {
+    "all": false,
+    "fs": {
+      "all": true,
+      "copyFile": true,
+      "createDir": true,
+      "exists": true,
+      "readDir": true,
+      "readFile": true,
+      "removeDir": true,
+      "removeFile": true,
+      "renameFile": true,
+      "scope": [
+        "$APP/*",
+        "$APP"
+      ],
+      "writeFile": true
+    },
+    "shell": {
+      "all": false,
+      "open": true
+    }
   },
   "tauri": {
     "bundle": {
       "active": true,
-      "targets": "all",
-      "identifier": "com.light.dev",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
         "icons/128x128@2x.png",
         "icons/icon.icns",
         "icons/icon.ico"
-      ]
+      ],
+      "identifier": "com.light.dev",
+      "targets": "all"
     },
     "security": {
       "csp": null
@@ -29,32 +52,11 @@
     "windows": [
       {
         "fullscreen": false,
+        "height": 760,
         "resizable": true,
         "title": "light",
-        "width": 1080,
-        "height": 760
+        "width": 1080
       }
     ]
   }
-  ,
-  "plugins": {
-    "all": false,
-    "shell": {
-      "all": false,
-      "open": true
-    },
-    "fs": {
-        "scope": ["$APP/*","$APP"],
-        "all": true,
-        "readFile": true,
-        "writeFile": true,
-        "readDir": true,
-        "copyFile": true,
-        "createDir": true,
-        "removeDir": true,
-        "removeFile": true,
-        "renameFile": true,
-        "exists": true
-      }
-	}
 }
