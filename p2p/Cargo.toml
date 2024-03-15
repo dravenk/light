@@ -1,5 +1,5 @@
 [package]
-name = "p2p"
+name = "light-p2p"
 version.workspace = true
 edition.workspace = true
 

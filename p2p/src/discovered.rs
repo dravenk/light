@@ -8,6 +8,7 @@ use libp2p::{
     tcp, yamux, PeerId, StreamProtocol, Swarm, Transport,
 };
 use serde::{Deserialize, Serialize};
+use tracing::debug;
 use std::error::Error;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -28,7 +29,7 @@ use std::thread;
 fn new_swarm() -> Swarm<NodeBehaviour> {
     let local_key = identity::Keypair::generate_ed25519();
     let local_peer_id = PeerId::from(local_key.public());
-    println!("Local peer id: {:?}", local_peer_id.to_string());
+    debug!("Local peer id: {:?}", local_peer_id.to_string());
 
     let tcp_transport = tcp::async_io::Transport::new(tcp::Config::default().nodelay(true))
         .upgrade(Version::V1Lazy)
@@ -45,8 +46,9 @@ fn new_swarm() -> Swarm<NodeBehaviour> {
         .boxed();
 
     let mdns = mdns::async_io::Behaviour::new(mdns::Config::default(), local_peer_id).unwrap();
+    let stream_protocal = "/file-exchange/2";
     let request_handler = request_response::cbor::Behaviour::new(
-        [(StreamProtocol::new("/file-exchange/2"), ProtocolSupport::Full)],
+        [(StreamProtocol::new(stream_protocal), ProtocolSupport::Full)],
         request_response::Config::default(),
     );
     //   keep_live: Config::new(Duration::from_secs(u64::MAX))
@@ -71,7 +73,7 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Box
             SwarmEvent::NewListenAddr { address, .. } => {
                 let msg = format!("address: {:?}", address);
                 let print_msg = move || {
-                    println!("{}", msg);
+                    debug!("{}", msg);
                 };
                 let _ = sender.send(Box::new(print_msg));
             }
@@ -81,7 +83,7 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Box
 
                     let msg = format!("mDNS discovered a new peer: {peer_id}");
                     let print_msg = move || {
-                        println!("{}", msg);
+                        debug!("{}", msg);
                     };
                     let _ = sender.send(Box::new(print_msg));
 
@@ -95,7 +97,7 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Box
                     let peer_id = peer.0;
                     let msg = format!("mDNS discover peer has expired: {peer_id}");
                     let print_msg = move || {
-                        println!("{}", msg);
+                        debug!("{}", msg);
                     };
                     let _ = sender.send(Box::new(print_msg));
                 }
@@ -104,14 +106,14 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Box
                 Message::Request { request, channel: _, .. } => {
                     let msg = format!("Request Message:{:#?}", request);
                     let print_msg = move || {
-                        println!("{}", msg);
+                        debug!("{}", msg);
                     };
                     let _ = sender.send(Box::new(print_msg));
                 }
                 Message::Response { request_id: _, response } => {
                     let msg = format!("Response Message:{:#?}", response);
                     let print_msg = move || {
-                        println!("{}", msg);
+                        debug!("{}", msg);
                     };
                     let _ = sender.send(Box::new(print_msg));
                 }
@@ -119,14 +121,14 @@ async fn swarm_process(mut swarm: Swarm<NodeBehaviour>, sender: mpsc::Sender<Box
             SwarmEvent::ConnectionClosed { peer_id, .. } => {
                 let msg = format!("ConnectionClosed peer_id {:#?}", peer_id.to_string());
                 let print_msg = move || {
-                    println!("{}", msg);
+                    debug!("{}", msg);
                 };
                 let _ = sender.send(Box::new(print_msg));
             }
             _other => {
                 let msg = format!("ConnectionClosed _other {:#?}", _other);
                 let print_msg = move || {
-                    println!("{}", msg);
+                    debug!("{}", msg);
                 };
                 let _ = sender.send(Box::new(print_msg));
             }

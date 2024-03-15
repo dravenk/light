@@ -1,15 +1,37 @@
 {
+  "app": {
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 760,
+        "resizable": true,
+        "title": "light",
+        "width": 1080
+      }
+    ],
+    "withGlobalTauri": true
+  },
   "build": {
     "beforeBuildCommand": "trunk build",
     "beforeDevCommand": "trunk serve",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": true
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist"
   },
-  "package": {
-    "productName": "light",
-    "version": "0.1.1"
+  "bundle": {
+    "active": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "targets": "all"
   },
+  "identifier": "com.light.dev",
   "plugins": {
     "all": false,
     "fs": {
@@ -33,30 +55,6 @@
       "open": true
     }
   },
-  "tauri": {
-    "bundle": {
-      "active": true,
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "com.light.dev",
-      "targets": "all"
-    },
-    "security": {
-      "csp": null
-    },
-    "windows": [
-      {
-        "fullscreen": false,
-        "height": 760,
-        "resizable": true,
-        "title": "light",
-        "width": 1080
-      }
-    ]
-  }
+  "productName": "light",
+  "version": "0.1.1"
 }

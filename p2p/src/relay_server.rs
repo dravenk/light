@@ -15,25 +15,26 @@ use tracing_subscriber::EnvFilter;
 
 pub enum RelayBehaviour {
     PeerId(String),
-    Event,
+    RelayStatus,
     Multiaddr(Multiaddr),
-    // Behaviour(libp2p::Swarm<Behaviour>),
     ObservedAddress(Multiaddr),
 }
 
-pub fn main() {
-    // let opt = Opt::parse();
-    let opt = &Opt { use_ipv6: Some(false), secret_key_seed: 1, port: 4001 };
 
-    let (tx, _) = std::sync::mpsc::channel();
-    let _ = self::run(opt, tx);
-}
+// pub fn main() {
+//     // let opt = Opt::parse();
+//     let opt = &Opt { use_ipv6: Some(false), secret_key_seed: 1, port: 4001 };
+
+//     let (tx, _) = std::sync::mpsc::channel();
+//     let _ = self::run(opt, tx);
+// }
 
 pub fn run(opt: &Opt, sender: Sender<Box<(dyn Fn() -> RelayBehaviour + Send + 'static)>>) -> Result<(), Box<dyn Error>> {
-    let _ = tracing_subscriber::fmt().with_env_filter(EnvFilter::from_default_env()).try_init();
+        let _ = tracing_subscriber::fmt().with_env_filter(EnvFilter::from_default_env()).try_init();
     // Create a static known PeerId based on given secret
     let local_key: identity::Keypair = generate_ed25519(opt.secret_key_seed);
 
+    let protocol_version = "/TODO/0.0.1".to_string();
     let mut swarm = libp2p::SwarmBuilder::with_existing_identity(local_key)
         .with_async_std()
         .with_tcp(tcp::Config::default(), noise::Config::new, yamux::Config::default)?
@@ -41,7 +42,7 @@ pub fn run(opt: &Opt, sender: Sender<Box<(dyn Fn() -> RelayBehaviour + Send + 's
         .with_behaviour(|key| Behaviour {
             relay: relay::Behaviour::new(key.public().to_peer_id(), Default::default()),
             ping: ping::Behaviour::new(ping::Config::new()),
-            identify: identify::Behaviour::new(identify::Config::new("/TODO/0.0.1".to_string(), key.public())),
+            identify: identify::Behaviour::new(identify::Config::new(protocol_version, key.public())),
         })?
         .build();
 
@@ -112,7 +113,7 @@ fn generate_ed25519(secret_key_seed: u8) -> identity::Keypair {
 }
 
 #[derive(Debug, Parser)]
-#[clap(name = "libp2p relay")]
+#[clap(name = "light relay")]
 pub struct Opt {
     /// Determine if the relay listen on ipv6 or ipv4 loopback address. the default is ipv4
     #[clap(long)]

@@ -1,52 +1,43 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::fs;
-
-use crate::db::*;
-use util::appdata;
-use wallet::phrase::PrivKey;
+use account;
+use keyring::Entry;
+// use account::phrase::PrivKey;
+// use light_utils::appdata;
 
 #[tauri::command]
-pub fn greet(name: &str) -> String {
-    let msg: &str = "You've been greeted from Rust!";
-    println!("{}", msg);
-    let conn = sqlite_conn().unwrap();
-    let conn = insert_value(conn, name);
-    let _ = select_table(&conn.unwrap(), "msg");
-    println!("greet! src-tauri/src/main.rs");
-    format!("{}{}", msg, name)
+pub fn get_status() -> String {
+    "ok".to_owned()
 }
 
 #[tauri::command]
-pub fn get_peer_id() -> String {
-    "".to_owned()
+pub fn generage_key(_strength: &str) -> String {
+    let (phrase, _) = account::seed::get_phrase_seed();
+    let phrase_str = phrase.phrase().to_owned().to_string();
+    phrase_str
 }
 
 #[tauri::command]
-pub fn create_key(path: &str) -> String {
-    println!("Creating a new key to {}", path);
-    let _ = wallet::keys::create_priv_k();
-    format!("Hello, {}! You've been greeted from Rust!", path)
+pub fn secure_save(key: String, value: String) -> Result<(), ()> {
+    let entry = Entry::new("Light", &key).expect("Failed to create entry");
+    let _ = entry.set_password(&value);
+    Ok(())
 }
 
 #[tauri::command]
-pub fn generage_key(strength: &str) -> String {
-    let mnemonic = wallet::phrase::get_mnemonic_by_strength(strength);
-    phrase_to_file(&mnemonic);
-    mnemonic.phrase
+pub fn secure_load(key: String) -> Result<String, String> {
+    let entry = Entry::new("Light", &key).expect("Failed to create entry");
+    if let Ok(password) = entry.get_password() {
+        Ok(password)
+    } else {
+        Err("not found".to_string())
+    }
 }
 
 #[tauri::command]
-pub fn insert_msg(msg: &str) -> String {
-    println!("insert_msg, {}! You've been greeted from Rust!", msg);
-    let conn = sqlite_conn().unwrap();
-    let _ = insert_value(conn, msg);
-    format!("Hello, {}! created message!", msg)
-}
-
-fn phrase_to_file(priv_key: &PrivKey) {
-    let toml_string = toml::to_string(&priv_key).expect("Could not encode TOML value");
-    fs::create_dir_all(appdata::app_dir()).expect("create dir error");
-    fs::write(appdata::key_path(), toml_string).expect("Could not write to file!");
+pub fn secure_remove(key: String) -> Result<(), ()> {
+    let entry = Entry::new("Light", &key).expect("Failed to create entry");
+    let _ = entry.delete_password();
+    Ok(())
 }

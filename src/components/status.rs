@@ -23,7 +23,7 @@ pub fn status() -> Html {
             spawn_local(async move {
                 let s = String::from("{}");
                 let args = serde_wasm_bindgen::to_value(&s).unwrap();
-                let peer_id = invoke("get_peer_id", args).await.as_string().unwrap();
+                let peer_id = invoke("get_status", args).await.as_string().unwrap();
                 peer_id_handle.set(peer_id);
             });
             || {}

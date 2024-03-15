@@ -1,6 +1,7 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
+use super::chat::Chat;
 use super::conversation::Conversation;
 use super::settings::Settings;
 use super::status::Status;
@@ -18,6 +19,8 @@ pub enum MainRoute {
     Settings,
     #[at("/conversation")]
     Conversation,
+    #[at("/chat")]
+    Chat,
 }
 
 pub fn switch(route: MainRoute) -> Html {
@@ -36,6 +39,9 @@ pub fn switch(route: MainRoute) -> Html {
         }
         MainRoute::Conversation => html! {
             <Conversation />
+        },
+        MainRoute::Chat => html! {
+            <Chat />
         },
     }
 }
